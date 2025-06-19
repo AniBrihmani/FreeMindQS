@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hyrje në QStafaAI</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#6366f1',
+            secondary: '#8b5cf6'
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-slate-900 text-white flex items-center justify-center min-h-screen">
+  <div class="bg-slate-800 p-8 rounded-xl shadow-2xl w-full max-w-md">
+    <h1 class="text-3xl font-bold mb-6 text-center text-primary">Hyrje në QStafaAI</h1>
+
+    {% if error %}
+      <div class="bg-red-600 text-white p-3 rounded mb-4 text-center">{{ error }}</div>
+    {% endif %}
+
+    <form method="POST" class="space-y-6">
+      <div>
+        <label for="kodi" class="block mb-2 font-medium">Kodi i hyrjes</label>
+        <input
+          type="text"
+          name="kodi"
+          id="kodi"
+          required
+          placeholder="Shkruaj kodin këtu"
+          class="w-full rounded-md bg-slate-700 border border-slate-600 px-4 py-2 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary"
+        />
+      </div>
+
+      <div>
+        <p class="mb-2 font-medium">Zgjidh rolin tënd:</p>
+        <div class="flex items-center space-x-6">
+          <label class="flex items-center cursor-pointer">
+            <input type="radio" name="roli" value="student" class="hidden peer" required />
+            <span class="w-5 h-5 mr-2 inline-block rounded-full border-2 border-white peer-checked:bg-primary peer-checked:border-primary transition"></span>
+            Nxënës
+          </label>
+
+          <label class="flex items-center cursor-pointer">
+            <input type="radio" name="roli" value="teacher" class="hidden peer" />
+            <span class="w-5 h-5 mr-2 inline-block rounded-full border-2 border-white peer-checked:bg-primary peer-checked:border-primary transition"></span>
+            Mësues
+          </label>
+
+          <label class="flex items-center cursor-pointer">
+            <input type="radio" name="roli" value="parent" class="hidden peer" />
+            <span class="w-5 h-5 mr-2 inline-block rounded-full border-2 border-white peer-checked:bg-primary peer-checked:border-primary transition"></span>
+            Prind
+          </label>
+        </div>
+      </div>
+
+      <button
+        type="submit"
+        class="w-full bg-primary hover:bg-secondary transition text-white font-semibold py-3 rounded-xl shadow-lg"
+      >
+        Hyr
+      </button>
+    </form>
+  </div>
+</body>
+</html>

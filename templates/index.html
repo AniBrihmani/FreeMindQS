@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QStafaAI - ChatBot Asistent</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#6366f1',
+            secondary: '#8b5cf6',
+            bubbleUser: '#1e40af',
+            bubbleAI: '#334155'
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-slate-900 text-white font-sans flex flex-col items-center justify-start min-h-screen py-8">
+  <div class="w-full max-w-2xl bg-slate-800/80 rounded-3xl shadow-2xl p-6 backdrop-blur-md">
+    
+    <div class="flex justify-between items-center mb-4">
+      <h1 class="text-3xl font-bold text-primary drop-shadow">QStafaAI 🤖</h1>
+      <!-- Butoni që hap direkt faqen Compose të Gmail -->
+      <a href="https://mail.google.com/mail/?view=cm&fs=1&to=sherbimipsikosocialqs@gmail.com&su=Ndihmë%20nga%20QStafaAI&body=Përshëndetje%2C%0ADua%20të%20marr%20ndihmë%20në%20lidhje%20me..."
+         target="_blank"
+         class="text-sm bg-green-500 hover:bg-green-600 text-white py-1 px-3 rounded-full transition">
+         📧 Shkruaj Email
+      </a>
+    </div>
+
+    <div class="bg-slate-900 p-4 rounded-xl h-96 overflow-y-auto flex flex-col gap-4 mb-4 border border-slate-700" id="chat-box">
+      {% for msg in chat_history %}
+        {% if msg.role == 'user' %}
+        <div class="self-end bg-bubbleUser text-white px-4 py-2 rounded-xl max-w-[75%] shadow-md">{{ msg.content }}</div>
+        {% else %}
+        <div class="self-start bg-bubbleAI text-white px-4 py-2 rounded-xl max-w-[75%] shadow-md">{{ msg.content }}</div>
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    <form method="POST" class="flex items-center gap-3">
+      <textarea name="pyetja" rows="2" required placeholder="Shkruaj këtu..."
+        class="flex-grow rounded-xl p-3 bg-slate-700 placeholder-slate-400 text-white border border-slate-600 resize-none focus:outline-none focus:ring-2 focus:ring-primary"></textarea>
+      <button type="submit"
+        class="bg-primary hover:bg-secondary text-white font-semibold py-2 px-5 rounded-xl transition shadow-lg hover:scale-105">
+        Dërgo
+      </button>
+    </form>
+
+  </div>
+  <footer class="text-sm text-slate-400 mt-6">&copy; 2025 QStafaAI - Created by Ani Brihmani</footer>
+</body>
+</html>
