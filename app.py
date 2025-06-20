@@ -1,3 +1,4 @@
+
 import os
 import requests
 from flask import Flask, request, render_template, redirect, url_for, session
@@ -932,9 +933,12 @@ c. Plani i veprimtarive mujore;
 
 """
 
-chat_history = []
-
 def merr_pergjigje(pyetja):
+    if "chat_history" not in session:
+        session["chat_history"] = []
+
+    chat_history = session["chat_history"]
+
     headers = {
         "Authorization": f"Bearer {api_key}",
         "Content-Type": "application/json"
@@ -947,11 +951,13 @@ def merr_pergjigje(pyetja):
             {"role": "user", "content": pyetja}
         ]
     }
+
     res = requests.post("https://api.groq.com/openai/v1/chat/completions", headers=headers, json=data)
     if res.status_code == 200:
         answer = res.json()["choices"][0]["message"]["content"]
         chat_history.append({"role": "user", "content": pyetja})
         chat_history.append({"role": "assistant", "content": answer})
+        session["chat_history"] = chat_history
         return answer
     return f"GABIM: {res.status_code} - {res.text}"
 
@@ -961,11 +967,11 @@ def login():
     if request.method == "POST":
         kodi = request.form.get("kodi", "").strip()
         roli = request.form.get("roli")
-        print(f"DEBUG: Kodi='{kodi}', Roli='{roli}'")  # Debug në terminal
 
         if kodi == "Klasa105" and roli in ["student", "teacher", "parent"]:
             session["logged_in"] = True
             session["roli"] = roli
+            session.pop("chat_history", None)
             return redirect(url_for("chat"))
         else:
             error = "Kodi i hyrjes është i pasaktë ose nuk ke zgjedhur rolin."
@@ -977,13 +983,21 @@ def chat():
     if not session.get("logged_in"):
         return redirect(url_for("login"))
 
+    if "chat_history" not in session:
+        session["chat_history"] = []
+
     pergjigje = None
     if request.method == "POST":
         pyetja = request.form.get("pyetja")
         if pyetja:
             pergjigje = merr_pergjigje(pyetja)
 
-    return render_template("index.html", chat_history=chat_history)
+    return render_template("index.html", chat_history=session["chat_history"])
+
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect(url_for("login"))
 
 if __name__ == "__main__":
     app.run(debug=True)
